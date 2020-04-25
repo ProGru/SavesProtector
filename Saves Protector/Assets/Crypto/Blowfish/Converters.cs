@@ -20,5 +20,6 @@ namespace Assets.Crypto.Blowfish
                              .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
                              .ToArray();
         }
+
     }
 }

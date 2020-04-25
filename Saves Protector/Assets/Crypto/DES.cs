@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Crypto
 {
-    public class DES : MonoBehaviour
+    public class DES
     {
         public static int[] PC1 =
                 {
