@@ -320,7 +320,7 @@ namespace Crypto
                 curentBlock = StringToByteArray(DeCrypt(ByteArrayToString(curentBlock)));
                 Buffer.BlockCopy(curentBlock, 0, coded, i * 8, 8);
             }
-            return  ConvertHex(ByteArrayToString(coded)));
+            return  ConvertHex(ByteArrayToString(coded));
         }
 
         public static string ConvertHex(string hexString)
