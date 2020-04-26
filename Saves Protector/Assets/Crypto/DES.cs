@@ -320,11 +320,33 @@ namespace Crypto
                 curentBlock = StringToByteArray(DeCrypt(ByteArrayToString(curentBlock)));
                 Buffer.BlockCopy(curentBlock, 0, coded, i * 8, 8);
             }
-
-            return ByteArrayToString(coded);
+            return  ConvertHex(ByteArrayToString(coded));
         }
 
+        public static string ConvertHex(string hexString)
+        {
+            try
+            {
+                string ascii = string.Empty;
 
+                for (int i = 0; i < hexString.Length; i += 2)
+                {
+                    string hs = string.Empty;
+
+                    hs = hexString.Substring(i, 2);
+                    ulong decval = Convert.ToUInt64(hs, 16);
+                    long deccc = Convert.ToInt64(hs, 16);
+                    char character = Convert.ToChar(deccc);
+                    ascii += character;
+
+                }
+
+                return ascii;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            return string.Empty;
+        }
         public string Crypt (string hexText)
         {
             BitArray bitKey = KeyPermutation(hexKey);
