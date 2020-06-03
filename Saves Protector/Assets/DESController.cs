@@ -9,7 +9,8 @@ public class DESController : MonoBehaviour
     public TextAsset XmlSaveFile;
     public TextAsset JsonSaveFile;
     public TextAsset YamlSaveFile;
-    private void Start()
+
+    /*private void Start()
     {
         var xmlStringValue = XmlSaveFile.ToString();
         var jsonStringValue = JsonSaveFile.ToString();
@@ -20,6 +21,6 @@ public class DESController : MonoBehaviour
         Debug.Log(encrypted);
         var decrypted = des.Decrypt(encrypted);
         Debug.Log(decrypted);
-    }
+    }*/
 
 }
