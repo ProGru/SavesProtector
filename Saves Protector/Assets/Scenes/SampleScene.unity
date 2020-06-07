@@ -489,7 +489,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1430179772}
-        m_MethodName: StartTwofish
+        m_MethodName: test
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1901,9 +1901,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c0725d5659ee91469ef5faf5e589f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XmlSaveFile: {fileID: 4900000, guid: 309b590ccb1d76c439ee31145f7cd403, type: 3}
-  JsonSaveFile: {fileID: 4900000, guid: 28f448979639fb04489c1b81730bdbee, type: 3}
-  YamlSaveFile: {fileID: 4900000, guid: dc85d4c5916a7934e88222fa412b035f, type: 3}
 --- !u!4 &1430179771
 Transform:
   m_ObjectHideFlags: 0

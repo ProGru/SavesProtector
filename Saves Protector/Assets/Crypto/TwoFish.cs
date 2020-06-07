@@ -14,7 +14,7 @@ public class TwoFish : MonoBehaviour
     byte[] T3 = { 13, 7, 15, 4, 1, 2, 6, 14, 9, 11, 3, 0, 8, 5, 12, 10 };
     //Reprezentacja RS dla Q1 w postaci decimal
     byte[] T0_q1 = { 2, 8, 11, 13, 15, 7, 6, 14, 3, 1, 9, 4, 0, 10, 12, 5 };
-    byte[] T1_q1 = { 1, 15, 2, 11, 4, 12, 3, 7, 6, 13, 10, 5, 15, 9, 0, 8 };
+    byte[] T1_q1 = { 1, 14, 2, 11, 4, 12, 3, 7, 6, 13, 10, 5, 15, 9, 0, 8 };
     byte[] T2_q1 = { 4, 12, 7, 5, 1, 6, 9, 10, 0, 14, 13, 8, 2, 11, 3, 15 };
     byte[] T3_q1 = { 11, 9, 5, 1, 12, 3, 13, 14, 6, 4, 7, 15, 2, 0, 8, 10 };
     
@@ -945,6 +945,74 @@ public class TwoFish : MonoBehaviour
         return AddAppend(AddAppend(AddAppend(otw[0], otw[1]), otw[2]), otw[3]);
     }
 
+    public string Encrypt(string text)
+    {
+
+        byte[] coded = Encoding.ASCII.GetBytes(text);
+
+        BitArray toCode = Reverse(new BitArray(coded));
+        if (toCode.Length < 128)
+        {
+            toCode = FillTo128bit(toCode);
+        }
+        //podział tekstu na 128bit bloki
+        BitArray[] splited = Enumerable
+            .Range(0, toCode.Length / 128)
+            .Select(offset => CopySlice(toCode, offset * 128, 128))
+            .ToArray();
+
+        BitArray[] done = new BitArray[splited.Length];
+
+        for (int i = 0; i < splited.Length ; i++)
+        {
+            done[i] = Encrypt(FillTo128bit(splited[i]));
+        }
+
+        BitArray toReturn = new BitArray(0);
+        foreach(BitArray i in done)
+        {
+            toReturn = AddAppend(toReturn, i);
+        }
+
+        byte[] byteToReturn = ConvertToByte(toReturn);
+
+        return ByteArrayToString(byteToReturn);
+    }
+
+    public string Decrypt(string text)
+    {
+        byte[] coded = StringToByteArray(text);
+
+        BitArray toCode = new BitArray(coded);
+        if (toCode.Length < 128)
+        {
+            toCode = FillTo128bit(toCode);
+        }
+        //podział tekstu na 128bit bloki
+        BitArray[] splited = Enumerable
+            .Range(0, toCode.Length / 128)
+            .Select(offset => CopySlice(toCode, offset * 128, 128))
+            .ToArray();
+
+        BitArray[] done = new BitArray[splited.Length];
+
+        for (int i = 0; i < splited.Length; i++)
+        {
+            done[i] = Decrypt(FillTo128bit(splited[i]));
+            
+        }
+
+        BitArray toReturn = new BitArray(0);
+        foreach (BitArray i in done)
+        {
+            toReturn = AddAppend(toReturn, i);
+        }
+
+        byte[] byteToReturn = ConvertToByte(toReturn);
+
+        return ByteArrayToString(byteToReturn);
+    }
+
     /// <summary>
     /// Przejście wszystkich etapów 16 rund whitening swap i output whitening z odwrotnymi kluczami
     /// <param name="plainText"> 128 bit tekst do dekrypcji</param>
@@ -998,6 +1066,22 @@ public class TwoFish : MonoBehaviour
     {
         BitArray tor = new BitArray(32);
         int tofill = 32 - a.Length;
+        for (int i = 0; i < tofill; i++)
+        {
+            tor[i] = false;
+        }
+
+        for (int i = tofill; i < tor.Length; i++)
+        {
+            tor[i] = a[i - tofill];
+        }
+        return tor;
+    }
+
+    public BitArray FillTo128bit(BitArray a)
+    {
+        BitArray tor = new BitArray(128);
+        int tofill = 128 - a.Length;
         for (int i = 0; i < tofill; i++)
         {
             tor[i] = false;

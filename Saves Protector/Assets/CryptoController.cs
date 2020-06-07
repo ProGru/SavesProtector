@@ -32,6 +32,8 @@ public class CryptoController : MonoBehaviour
     [SerializeField]
     private DESController desController;
 
+    [SerializeField]
+    private TwoFishController twoFishController;
 
     private void Awake()
     {
@@ -54,6 +56,7 @@ public class CryptoController : MonoBehaviour
         {
             bool shouldEncrypt = ParseEncryptionSliderValue();
             AlgorithmType algorithm = ParseAlgorithmValue();
+            Debug.Log(algorithm);
 
             string asset = LoadAssetFromPath();
 
@@ -66,6 +69,9 @@ public class CryptoController : MonoBehaviour
             else if (algorithm == AlgorithmType.DES)
             {
                 result = desController.StartDES(asset, shouldEncrypt);
+            }else if (algorithm == AlgorithmType.TWOFISH)
+            {
+                result = twoFishController.StartTwofish(asset, shouldEncrypt);
             }
 
             SaveToFile(shouldEncrypt, result);
@@ -196,6 +202,7 @@ public class CryptoController : MonoBehaviour
 
     private AlgorithmType ParseAlgorithmValue()
     {
+        Debug.Log(algorithmSlider.value);
         return (AlgorithmType)algorithmSlider.value;
     }
 

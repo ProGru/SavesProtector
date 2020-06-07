@@ -6,20 +6,31 @@ using System.Text;
 
 public class TwoFishController : MonoBehaviour
 {
-    private const string key = "00000000000000000000000000000000";//"57656C636F6D52054776F46669736820";
+    private string key = "00000000000000000000000000000000";//"57656C636F6D52054776F46669736820";
     private string text128bit = "000102030405060708090A0B0C0D0E0F";//"54776F46697368206973206E69636520";
 
-    public void StartTwofish()
+    public string StartTwofish(string asset, bool shouldEncrypt)
     {
         TwoFish tf = new TwoFish();
+        BitArray bytes = TwoFish.ConvertHexToBitArray(key);
+        tf.GenerateKeys(bytes);
+        string result = "";
+        if (shouldEncrypt)
+        {
+            result = tf.Encrypt(asset);
+        }
+        else
+        {
+            result = tf.Decrypt(asset);
+        }
+        return result;
+    }
 
+    public void test()
+    {
+        Debug.Log(StartTwofish("dddddddd", true));
 
-        BitArray bytes = TwoFish.ConvertHexToBitArray(key); //Encoding.ASCII.GetBytes(key);
-
-        BitArray textBytes = TwoFish.ConvertHexToBitArray(text128bit);//Encoding.ASCII.GetBytes(text128bit);
-
-
-        tf.InputWhitening(bytes, textBytes);
+        Debug.Log(StartTwofish(StartTwofish("dddddddd", true), false));
     }
 
     //sprawdzone obliczeniami
@@ -68,9 +79,10 @@ public class TwoFishController : MonoBehaviour
     public void SubKeyGeneratorTest()
     {
         TwoFish tf = new TwoFish();
-        BitArray bytes = TwoFish.ConvertHexToBitArray("000102030405060708090A0B0C0D0E0F");
+        BitArray bytes = TwoFish.ConvertHexToBitArray("00000000000000000000000000000000");
 
-        tf.SubkeysKGenerator(0,bytes);
+        BitArray[] keys= tf.SubkeysKGenerator(0,bytes);
+        tf.DebugBits(keys[0]);
     }
 
     public void G_FunctionTest()
